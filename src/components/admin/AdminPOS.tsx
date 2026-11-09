@@ -45,6 +45,7 @@ export const AdminPOS: React.FC<AdminPOSProps> = ({ products, exchangeRate, onRe
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [lastOrderCompleted, setLastOrderCompleted] = useState<any | null>(null);
+  const [mobileTab, setMobileTab] = useState<'catalog' | 'ticket'>('catalog');
 
   // Filter available products (only active with stock > 0)
   const availableProducts = useMemo(() => {
@@ -220,10 +221,41 @@ export const AdminPOS: React.FC<AdminPOSProps> = ({ products, exchangeRate, onRe
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      {/* Left Column: Product Selector (7 cols) */}
-      <div className="lg:col-span-7 space-y-4">
+    <div>
+      {/* Mobile Selector between Catalog and Ticket */}
+      <div className="lg:hidden flex items-center p-1 bg-white rounded-full border border-apple-border/60 shadow-xs mb-4">
+        <button
+          type="button"
+          onClick={() => setMobileTab('catalog')}
+          className={`flex-1 py-2 text-xs font-semibold rounded-full transition-all ${
+            mobileTab === 'catalog'
+              ? 'bg-apple-text text-white shadow-xs'
+              : 'text-apple-secondary hover:text-apple-text'
+          }`}
+        >
+          Catálogo ({availableProducts.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab('ticket')}
+          className={`flex-1 py-2 text-xs font-semibold rounded-full transition-all flex items-center justify-center space-x-1.5 ${
+            mobileTab === 'ticket'
+              ? 'bg-apple-blue text-white shadow-xs'
+              : 'text-apple-secondary hover:text-apple-text'
+          }`}
+        >
+          <span>Ticket Mostrador</span>
+          {posCart.length > 0 && (
+            <span className="bg-white/20 text-current text-[10px] px-1.5 py-0.2 rounded-full font-bold">
+              {posCart.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
+        {/* Left Column: Product Selector (7 cols) */}
+        <div className={`lg:col-span-7 space-y-4 ${mobileTab === 'catalog' ? 'block' : 'hidden lg:block'}`}>
         
         {/* Search & Category Filter */}
         <div className="flex flex-col sm:flex-row gap-3">
@@ -307,7 +339,7 @@ export const AdminPOS: React.FC<AdminPOSProps> = ({ products, exchangeRate, onRe
       </div>
 
       {/* Right Column: Ticket Mostrador & Pagos Mixtos (5 cols) */}
-      <div className="lg:col-span-5 bg-white rounded-apple-lg border border-apple-border/60 p-5 shadow-apple-card flex flex-col justify-between space-y-5">
+      <div className={`lg:col-span-5 bg-white rounded-apple-lg border border-apple-border/60 p-4 sm:p-5 shadow-apple-card flex flex-col justify-between space-y-5 ${mobileTab === 'ticket' ? 'block' : 'hidden lg:flex'}`}>
         
         <div className="space-y-4">
           <div className="flex items-center justify-between border-b border-apple-border/40 pb-3">
@@ -562,6 +594,22 @@ export const AdminPOS: React.FC<AdminPOSProps> = ({ products, exchangeRate, onRe
         </div>
 
       </div>
+
+      </div>
+
+      {/* Floating Bottom Bar on Mobile when viewing Catalog */}
+      {mobileTab === 'catalog' && posCart.length > 0 && (
+        <div className="lg:hidden fixed bottom-16 inset-x-3 z-30 animate-in fade-in slide-in-from-bottom-2">
+          <button
+            type="button"
+            onClick={() => setMobileTab('ticket')}
+            className="w-full bg-apple-blue hover:bg-apple-blue-hover text-white py-3 px-4 rounded-full font-semibold text-xs shadow-lg flex items-center justify-between active:scale-95 transition-all"
+          >
+            <span>Ver Ticket ({posCart.length} {posCart.length === 1 ? 'item' : 'items'})</span>
+            <span className="font-bold">{formatUSD(totalUSD)} • {formatARS(totalARS)} →</span>
+          </button>
+        </div>
+      )}
 
     </div>
   );

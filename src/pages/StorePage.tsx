@@ -62,14 +62,14 @@ export const StorePage: React.FC<StorePageProps> = ({
     <div className="min-h-screen pb-16">
       
       {/* Apple Hero Highlight Bar */}
-      <section className="bg-white border-b border-apple-border/40 py-12 sm:py-16 px-4 sm:px-6 lg:px-8 text-center transition-all">
-        <div className="max-w-4xl mx-auto space-y-4">
+      <section className="bg-white border-b border-apple-border/40 py-8 sm:py-16 px-4 sm:px-6 lg:px-8 text-center transition-all">
+        <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
           <div className="inline-flex items-center space-x-2 bg-apple-blue/10 text-apple-blue px-3.5 py-1 rounded-full text-xs font-semibold">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>Tienda Oficial World Apple</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-apple-text">
+          <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-apple-text">
             {activeCategory === 'nuevo' && 'iPhones Nuevos. Sellados.'}
             {activeCategory === 'usado' && 'iPhones Usados Seleccionados.'}
             {activeCategory === 'accesorio' && 'Accesorios Oficiales Apple.'}
@@ -103,10 +103,10 @@ export const StorePage: React.FC<StorePageProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         
         {/* Navigation Tabs Bar Apple Style */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-apple-border/40">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 sm:pb-6 border-b border-apple-border/40">
           
           {/* Main 3 Requested Tabs */}
-          <div className="flex items-center space-x-2 overflow-x-auto scrollbar-none pb-1 sm:pb-0">
+          <div className="flex items-center space-x-2 overflow-x-auto scrollbar-none pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
             <button
               onClick={() => onSelectCategory && onSelectCategory('nuevo')}
               className={`flex items-center space-x-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${

@@ -57,7 +57,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div
       onClick={() => onOpenDetail && onOpenDetail(product)}
-      className="group bg-white rounded-apple border border-apple-border/50 p-5 flex flex-col justify-between hover:shadow-apple-hover transition-all duration-300 hover:border-apple-border cursor-pointer relative"
+      className="group bg-white rounded-2xl sm:rounded-apple border border-apple-border/50 p-4 sm:p-5 flex flex-col justify-between hover:shadow-apple-hover transition-all duration-300 hover:border-apple-border cursor-pointer relative active:scale-[0.99]"
     >
       <div>
         {/* Top Badges */}

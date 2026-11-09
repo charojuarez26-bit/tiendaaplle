@@ -193,6 +193,19 @@ export const TradeInPage: React.FC<TradeInPageProps> = ({ onBackToStore }) => {
               
               {/* Step 1: Dispositivo */}
               <div className="space-y-4">
+                {/* Mobile Quick Valuation Banner */}
+                <div className="lg:hidden p-3.5 rounded-2xl bg-apple-blue/5 border border-apple-blue/20 text-center space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-apple-blue tracking-wider block">
+                    Tasación Preliminar en Vivo
+                  </span>
+                  <div className="text-xl font-black text-apple-text tracking-tight">
+                    {formatUSD(estimatedValuation.min)} - {formatUSD(estimatedValuation.max)} USD
+                  </div>
+                  <span className="text-[11px] text-emerald-600 font-medium block">
+                    Aprox. {formatARS(estimatedValuation.min * exchangeRate)} - {formatARS(estimatedValuation.max * exchangeRate)} ARS
+                  </span>
+                </div>
+
                 <div className="flex items-center justify-between border-b border-apple-border/40 pb-2">
                   <h3 className="text-xs uppercase font-bold text-apple-secondary tracking-wider">
                     1. Selección de Dispositivo

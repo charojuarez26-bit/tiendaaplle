@@ -126,8 +126,138 @@ export const AdminOrdersManager: React.FC<AdminOrdersManagerProps> = ({ orders, 
         </div>
       </div>
 
-      {/* Orders Table */}
-      <div className="bg-white rounded-apple border border-apple-border/50 overflow-hidden shadow-apple-sm">
+      {/* Mobile Card List (block md:hidden) */}
+      <div className="md:hidden space-y-3">
+        {filteredOrders.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-apple-border/50 p-8 text-center text-xs text-apple-secondary">
+            No se encontraron órdenes con este filtro.
+          </div>
+        ) : (
+          filteredOrders.map((ord) => {
+            const isProcessing = processingId === ord.id;
+            return (
+              <div
+                key={ord.id}
+                className="bg-white rounded-2xl border border-apple-border/60 p-4 shadow-sm space-y-3"
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between pb-2 border-b border-apple-border/30">
+                  <div>
+                    <span className="font-mono font-bold text-apple-text text-sm">
+                      #{ord.id.slice(0, 8).toUpperCase()}
+                    </span>
+                    <span className="text-[10px] text-apple-secondary block">
+                      {formatDate(ord.created_at)}
+                    </span>
+                  </div>
+                  <Badge
+                    variant={
+                      ord.status === 'aprobado_cobrado'
+                        ? 'green'
+                        : ord.status === 'pendiente'
+                        ? 'orange'
+                        : 'red'
+                    }
+                  >
+                    {ord.status === 'aprobado_cobrado'
+                      ? 'Aprobado'
+                      : ord.status === 'pendiente'
+                      ? 'Pendiente'
+                      : 'Cancelado'}
+                  </Badge>
+                </div>
+
+                {/* Customer */}
+                <div className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-semibold text-apple-text block">{ord.customer_name}</span>
+                    <span className="text-[11px] text-apple-secondary">{ord.customer_phone}</span>
+                  </div>
+                  <a
+                    href={getWhatsAppOrderUrl(ord)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 flex items-center space-x-1 text-xs font-medium"
+                    title="Chatear en WhatsApp"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span className="text-[11px]">Chat</span>
+                  </a>
+                </div>
+
+                {/* Delivery */}
+                <div className="text-[11px] text-apple-secondary flex items-center space-x-1.5">
+                  {ord.delivery_type === 'envio' ? (
+                    <Truck className="w-3.5 h-3.5 text-apple-blue shrink-0" />
+                  ) : (
+                    <Store className="w-3.5 h-3.5 text-apple-secondary shrink-0" />
+                  )}
+                  <span className="capitalize font-medium text-apple-text">{ord.delivery_type}</span>
+                  {ord.delivery_address && <span className="truncate">• {ord.delivery_address}</span>}
+                </div>
+
+                {/* Items */}
+                <div className="bg-apple-bg/50 rounded-xl p-2.5 space-y-1 text-xs">
+                  {ord.items?.map((it, idx) => (
+                    <div key={idx} className="flex justify-between text-[11px]">
+                      <span className="truncate pr-2">
+                        <strong className="text-apple-text">{it.quantity}x</strong> {it.name}
+                        {(it.selected_storage || it.selected_color) && (
+                          <span className="text-apple-secondary"> ({it.selected_storage})</span>
+                        )}
+                      </span>
+                      <span className="font-semibold text-apple-text shrink-0">{formatUSD(it.subtotal_usd)}</span>
+                    </div>
+                  ))}
+                  <div className="pt-1.5 border-t border-apple-border/30 flex justify-between font-bold text-xs">
+                    <span>Total:</span>
+                    <span className="text-apple-blue">{formatUSD(ord.total_usd)} • {formatARS(ord.total_ars)}</span>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2 pt-1">
+                  {ord.status === 'pendiente' && (
+                    <button
+                      type="button"
+                      disabled={isProcessing}
+                      onClick={() => handleApproveOrder(ord)}
+                      className="flex-1 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1 active:scale-95 transition-all shadow-xs"
+                    >
+                      <CheckCircle className="w-3.5 h-3.5" />
+                      <span>{isProcessing ? 'Procesando...' : 'Aprobar y Cobrar'}</span>
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => downloadReceiptPDF(ord)}
+                    className="py-2 px-3 rounded-full bg-apple-bg hover:bg-[#E8E8ED] text-apple-text text-xs font-medium border border-apple-border/60 flex items-center space-x-1"
+                    title="Descargar Comprobante PDF"
+                  >
+                    <FileDown className="w-3.5 h-3.5 text-apple-blue" />
+                    <span>PDF</span>
+                  </button>
+
+                  {ord.status === 'pendiente' && (
+                    <button
+                      type="button"
+                      onClick={() => handleCancelOrder(ord.id)}
+                      className="p-2 rounded-full text-rose-600 hover:bg-rose-50 border border-rose-200"
+                      title="Cancelar orden"
+                    >
+                      <XCircle className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Desktop Orders Table */}
+      <div className="hidden md:block bg-white rounded-apple border border-apple-border/50 overflow-hidden shadow-apple-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#FBFBFD] border-b border-apple-border/40 text-apple-secondary uppercase tracking-wider">

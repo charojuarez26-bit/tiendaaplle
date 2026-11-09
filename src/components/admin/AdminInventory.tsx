@@ -220,8 +220,80 @@ export const AdminInventory: React.FC<AdminInventoryProps> = ({ products, onRefr
         </AppleButton>
       </div>
 
-      {/* Products Table */}
-      <div className="bg-white rounded-apple border border-apple-border/50 overflow-hidden shadow-apple-sm">
+      {/* Mobile Inventory Cards (block md:hidden) */}
+      <div className="md:hidden space-y-3">
+        {filteredProducts.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-apple-border/50 p-8 text-center text-xs text-apple-secondary">
+            No hay productos registrados en esta sección.
+          </div>
+        ) : (
+          filteredProducts.map((p) => (
+            <div
+              key={p.id}
+              className="bg-white rounded-2xl border border-apple-border/60 p-4 shadow-sm flex items-center justify-between gap-3"
+            >
+              <div className="flex items-center space-x-3 min-w-0">
+                <img
+                  src={
+                    p.image_url ||
+                    'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=100&q=80'
+                  }
+                  alt={p.name}
+                  className="w-12 h-12 object-contain rounded-xl bg-apple-bg p-1 border border-apple-border/40 shrink-0"
+                />
+                <div className="min-w-0">
+                  <h4 className="font-semibold text-xs text-apple-text truncate">{p.name}</h4>
+                  <div className="flex items-center space-x-2 text-[11px] text-apple-secondary mt-0.5">
+                    <span className="font-bold text-apple-text">{formatUSD(p.price_usd)}</span>
+                    <span>•</span>
+                    <span className={p.stock > 0 ? 'text-emerald-600 font-medium' : 'text-rose-600 font-bold'}>
+                      Stock: {p.stock}
+                    </span>
+                  </div>
+                  {p.category === 'usado' && p.battery_health && (
+                    <span className="text-[10px] text-emerald-600 font-medium block">
+                      {p.battery_health}% bat. • {p.aesthetic_condition}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex items-center space-x-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleToggleStatus(p)}
+                  className={`p-2 rounded-full transition-colors ${
+                    p.is_active ? 'text-emerald-600 hover:bg-emerald-50' : 'text-apple-secondary hover:bg-gray-100'
+                  }`}
+                  title={p.is_active ? 'Pausar producto' : 'Activar producto'}
+                >
+                  <Power className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleOpenEdit(p)}
+                  className="p-2 text-apple-blue hover:bg-apple-blue/10 rounded-full"
+                  title="Editar"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(p)}
+                  className="p-2 text-apple-red hover:bg-rose-50 rounded-full"
+                  title="Eliminar"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Products Table */}
+      <div className="hidden md:block bg-white rounded-apple border border-apple-border/50 overflow-hidden shadow-apple-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-[#FBFBFD] border-b border-apple-border/40 text-apple-secondary uppercase tracking-wider">

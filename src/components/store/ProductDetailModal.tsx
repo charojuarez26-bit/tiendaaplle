@@ -97,11 +97,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         onClick={onClose}
       />
 
-      <div className="min-h-full flex items-center justify-center p-3 sm:p-6">
-        <div className="relative bg-white rounded-apple-lg border border-apple-border/60 max-w-4xl w-full overflow-hidden shadow-apple-modal z-10 animate-in fade-in zoom-in-95 duration-200">
+      <div className="min-h-full flex items-end sm:items-center justify-center p-0 sm:p-6">
+        <div className="relative bg-white rounded-t-3xl sm:rounded-apple-lg border border-apple-border/60 max-w-4xl w-full overflow-hidden shadow-apple-modal z-10 animate-in fade-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200">
           
           {/* Close button */}
-          <div className="absolute top-4 right-4 z-20 flex items-center space-x-2">
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 flex items-center space-x-2">
             <button
               onClick={handleShare}
               className="w-9 h-9 rounded-full bg-apple-bg/80 hover:bg-apple-bg text-apple-secondary hover:text-apple-text flex items-center justify-center transition-colors"
@@ -341,13 +341,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </div>
 
               {/* Main CTA */}
-              <div className="pt-4 border-t border-apple-border/40">
+              <div className="sticky bottom-0 bg-white/95 backdrop-blur-md pt-3 pb-safe sm:pb-4 border-t border-apple-border/40 z-20 mt-4 -mx-6 sm:mx-0 px-6 sm:px-0">
                 <AppleButton
                   onClick={handleAddToCart}
                   disabled={isSoldOut}
                   variant={isAdded ? 'secondary' : 'primary'}
                   size="lg"
-                  className="w-full flex items-center justify-center space-x-2 py-4"
+                  className="w-full flex items-center justify-center space-x-2 py-3.5 sm:py-4 active:scale-95"
                 >
                   {isSoldOut ? (
                     <span>Producto Agotado</span>

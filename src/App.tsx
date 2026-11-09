@@ -3,6 +3,7 @@ import { CartProvider } from './context/CartContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { CartDrawer } from './components/store/CartDrawer';
+import { MobileTabBar } from './components/layout/MobileTabBar';
 import { StorePage } from './pages/StorePage';
 import { TradeInPage } from './pages/TradeInPage';
 import { AdminDashboard } from './pages/AdminDashboard';
@@ -20,7 +21,7 @@ export const App: React.FC = () => {
 
   return (
     <CartProvider>
-      <div className="min-h-screen flex flex-col bg-apple-bg text-apple-text font-sans antialiased selection:bg-apple-blue selection:text-white">
+      <div className="min-h-screen flex flex-col bg-apple-bg text-apple-text font-sans antialiased selection:bg-apple-blue selection:text-white pb-16 lg:pb-0">
         {/* Navigation Bar Apple Style */}
         <Navbar
           currentView={currentView}
@@ -57,6 +58,14 @@ export const App: React.FC = () => {
 
         {/* Apple Style Footer */}
         <Footer />
+
+        {/* iOS Native Style Bottom Tab Bar on Mobile */}
+        <MobileTabBar
+          currentView={currentView}
+          onNavigate={(view) => setCurrentView(view as any)}
+          activeCategory={activeCategory}
+          onSelectCategory={handleSelectCategory}
+        />
       </div>
     </CartProvider>
   );

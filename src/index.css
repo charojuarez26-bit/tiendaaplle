@@ -4,27 +4,44 @@
 
 @layer base {
   :root {
-    --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif;
     background-color: #F5F5F7;
     color: #1D1D1F;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+
+  /* Prevent auto-zoom on mobile inputs in iOS */
+  @media (max-width: 640px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
   }
 }
 
 /* Custom Apple Glassmorphism and Transitions */
 .apple-glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
 .apple-glass-dark {
-  background: rgba(29, 29, 31, 0.8);
+  background: rgba(29, 29, 31, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -36,12 +53,17 @@
   border-radius: 980px;
   padding: 8px 16px;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  touch-action: manipulation;
 }
 
 .apple-button:hover {
   background-color: #0077ED;
+}
+
+.apple-button:active {
+  transform: scale(0.97);
 }
 
 .apple-button-secondary {
@@ -50,9 +72,32 @@
   border-radius: 980px;
   padding: 8px 16px;
   font-size: 14px;
+  font-weight: 500;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  touch-action: manipulation;
 }
 
 .apple-button-secondary:hover {
   background-color: #E8E8ED;
+}
+
+.apple-button-secondary:active {
+  transform: scale(0.97);
+}
+
+/* Hide scrollbar for touch carousels and tabs */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Safe area insets for iOS notches and dynamic island */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
 }

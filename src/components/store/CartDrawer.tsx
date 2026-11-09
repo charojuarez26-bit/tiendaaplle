@@ -129,8 +129,8 @@ export const CartDrawer: React.FC = () => {
         onClick={handleClose}
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
-        <div className="w-screen max-w-lg bg-white shadow-2xl flex flex-col justify-between">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+        <div className="w-screen max-w-full sm:max-w-lg bg-white shadow-2xl flex flex-col justify-between">
           
           {/* Header */}
           <div className="p-5 sm:p-6 border-b border-apple-border/50 flex items-center justify-between bg-white/90 backdrop-blur-md sticky top-0 z-10">
@@ -489,7 +489,7 @@ export const CartDrawer: React.FC = () => {
 
           {/* Drawer Footer (Sticky Totals & Action) */}
           {cart.length > 0 && step !== 'success' && (
-            <div className="p-5 sm:p-6 border-t border-apple-border/50 bg-[#FBFBFD] space-y-4">
+            <div className="p-4 sm:p-6 border-t border-apple-border/50 bg-[#FBFBFD] space-y-3 sm:space-y-4 pb-safe">
               
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs text-apple-secondary">

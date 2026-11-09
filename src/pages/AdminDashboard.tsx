@@ -204,41 +204,41 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore })
       {activeTab === 'resumen' && (
         <div className="space-y-8 pt-2">
           {/* Top Stat Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-apple border border-apple-border/50 p-5 shadow-apple-sm">
-              <span className="text-xs font-semibold text-apple-secondary uppercase tracking-wider">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-white rounded-apple border border-apple-border/50 p-4 sm:p-5 shadow-apple-sm">
+              <span className="text-[10px] sm:text-xs font-semibold text-apple-secondary uppercase tracking-wider block">
                 Total en Caja (ARS)
               </span>
-              <div className="text-2xl font-black text-apple-text mt-2">{formatARS(breakdown.total_ars)}</div>
-              <span className="text-[11px] text-emerald-600 font-medium">Balance activo en pesos</span>
+              <div className="text-xl sm:text-2xl font-black text-apple-text mt-1.5 sm:mt-2 truncate">{formatARS(breakdown.total_ars)}</div>
+              <span className="text-[10px] sm:text-[11px] text-emerald-600 font-medium">Balance en pesos</span>
             </div>
 
-            <div className="bg-white rounded-apple border border-apple-border/50 p-5 shadow-apple-sm">
-              <span className="text-xs font-semibold text-apple-secondary uppercase tracking-wider">
+            <div className="bg-white rounded-apple border border-apple-border/50 p-4 sm:p-5 shadow-apple-sm">
+              <span className="text-[10px] sm:text-xs font-semibold text-apple-secondary uppercase tracking-wider block">
                 Total en Caja (USD)
               </span>
-              <div className="text-2xl font-black text-apple-text mt-2">{formatUSD(breakdown.total_usd)}</div>
-              <span className="text-[11px] text-emerald-600 font-medium">Dólares físicos en tesorería</span>
+              <div className="text-xl sm:text-2xl font-black text-apple-text mt-1.5 sm:mt-2">{formatUSD(breakdown.total_usd)}</div>
+              <span className="text-[10px] sm:text-[11px] text-emerald-600 font-medium">Físico en tesorería</span>
             </div>
 
-            <div className="bg-white rounded-apple border border-apple-border/50 p-5 shadow-apple-sm">
-              <span className="text-xs font-semibold text-apple-secondary uppercase tracking-wider">
-                Órdenes Web Pendientes
+            <div className="bg-white rounded-apple border border-apple-border/50 p-4 sm:p-5 shadow-apple-sm">
+              <span className="text-[10px] sm:text-xs font-semibold text-apple-secondary uppercase tracking-wider block">
+                Órdenes Web
               </span>
-              <div className="text-2xl font-black text-amber-600 mt-2">
-                {orders.filter((o) => o.status === 'pendiente').length}
+              <div className="text-xl sm:text-2xl font-black text-amber-600 mt-1.5 sm:mt-2">
+                {orders.filter((o) => o.status === 'pendiente').length} pend.
               </div>
-              <span className="text-[11px] text-amber-700 font-medium">Esperando aprobación y cobro</span>
+              <span className="text-[10px] sm:text-[11px] text-amber-700 font-medium">Aguardando cobro</span>
             </div>
 
-            <div className="bg-white rounded-apple border border-apple-border/50 p-5 shadow-apple-sm">
-              <span className="text-xs font-semibold text-apple-secondary uppercase tracking-wider">
-                Solicitudes de Canje
+            <div className="bg-white rounded-apple border border-apple-border/50 p-4 sm:p-5 shadow-apple-sm">
+              <span className="text-[10px] sm:text-xs font-semibold text-apple-secondary uppercase tracking-wider block">
+                Plan Canje
               </span>
-              <div className="text-2xl font-black text-apple-blue mt-2">
-                {tradeIns.filter((t) => t.status === 'pendiente_revision').length}
+              <div className="text-xl sm:text-2xl font-black text-apple-blue mt-1.5 sm:mt-2">
+                {tradeIns.filter((t) => t.status === 'pendiente_revision').length} pend.
               </div>
-              <span className="text-[11px] text-apple-blue font-medium">Aguardando cotización de tasador</span>
+              <span className="text-[10px] sm:text-[11px] text-apple-blue font-medium">Para cotizar</span>
             </div>
           </div>
 
@@ -339,7 +339,84 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToStore })
             <span className="text-xs text-apple-secondary">{tradeIns.length} registradas</span>
           </div>
 
-          <div className="bg-white rounded-apple border border-apple-border/50 overflow-hidden shadow-apple-sm">
+          {/* Mobile Trade-Ins Cards (block md:hidden) */}
+          <div className="md:hidden space-y-3">
+            {tradeIns.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-apple-border/50 p-8 text-center text-xs text-apple-secondary">
+                No hay solicitudes de Plan Canje registradas.
+              </div>
+            ) : (
+              tradeIns.map((t) => (
+                <div
+                  key={t.id}
+                  className="bg-white rounded-2xl border border-apple-border/60 p-4 shadow-sm space-y-3"
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-apple-border/30">
+                    <div>
+                      <span className="font-semibold text-apple-text text-sm block">{t.device_model}</span>
+                      <span className="text-[10px] text-apple-secondary block">{formatDate(t.created_at)}</span>
+                    </div>
+                    <Badge
+                      variant={
+                        t.status === 'cotizado'
+                          ? 'green'
+                          : t.status === 'pendiente_revision'
+                          ? 'orange'
+                          : 'red'
+                      }
+                    >
+                      {t.status.replace('_', ' ')}
+                    </Badge>
+                  </div>
+
+                  <div className="text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-apple-secondary">Cliente:</span>
+                      <span className="font-medium text-apple-text">{t.customer_name} ({t.customer_phone})</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-apple-secondary">Estado:</span>
+                      <span>{t.battery_health ? `${t.battery_health}% bat.` : ''} {t.has_box ? '• Con caja' : ''}</span>
+                    </div>
+                    <p className="text-[11px] text-apple-secondary bg-apple-bg/50 p-2 rounded-lg mt-1">
+                      {t.condition}
+                    </p>
+                    {t.offered_value_usd && (
+                      <div className="flex justify-between pt-1 font-bold text-apple-blue">
+                        <span>Cotización:</span>
+                        <span>{formatUSD(t.offered_value_usd)}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {t.status === 'pendiente_revision' && (
+                    <div className="flex items-center gap-2 pt-1 border-t border-apple-border/30">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const val = prompt('Ingresa el monto formal cotizado en USD para el cliente:');
+                          if (val) handleUpdateTradeStatus(t.id, 'cotizado', parseFloat(val));
+                        }}
+                        className="flex-1 py-2 rounded-full bg-apple-blue text-white text-xs font-semibold shadow-xs active:scale-95"
+                      >
+                        Cotizar USD
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleUpdateTradeStatus(t.id, 'rechazado')}
+                        className="py-2 px-4 rounded-full text-rose-600 bg-rose-50 hover:bg-rose-100 text-xs font-semibold border border-rose-200"
+                      >
+                        Rechazar
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Desktop Trade-Ins Table */}
+          <div className="hidden md:block bg-white rounded-apple border border-apple-border/50 overflow-hidden shadow-apple-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#FBFBFD] border-b border-apple-border/40 text-apple-secondary uppercase tracking-wider">
